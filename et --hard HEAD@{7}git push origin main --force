@@ -1,0 +1,15 @@
+[33m764d5ee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m764d5ee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{1}: reset: moving to HEAD
+[33m764d5ee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{2}: rebase (abort): returning to refs/heads/main
+[33m764d5ee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{3}: rebase (abort): returning to refs/heads/main
+[33m064f7a8[m[33m ([m[1;32magents/intact-tuna[m[33m, [m[1;32magents/e6abe842-975b-41d9-a6be-6e7d077cc0a9[m[33m, [m[1;32magents/circular-planarian[m[33m, [m[1;32magents/b4e1dcf3-d141-42bb-8446-2dd457014d78[m[33m)[m HEAD@{4}: commit: .
+[33mf3aafbf[m[33m ([m[1;32magents/federal-cricket[m[33m)[m HEAD@{5}: commit: add role
+[33m60bbdde[m HEAD@{6}: commit: .
+[33mf4ef32a[m HEAD@{7}: commit: Change website language to English
+[33md83ff89[m HEAD@{8}: commit: .
+[33m549216f[m HEAD@{9}: commit: add ai
+[33mf96b3a1[m HEAD@{10}: commit (amend): edit the project
+[33m764d5ee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{11}: commit: Final update before sleep
+[33m7988006[m HEAD@{12}: Branch: renamed refs/heads/main to refs/heads/main
+[33m7988006[m HEAD@{14}: commit: first commit
+[33m22a7da9[m HEAD@{15}: clone: from https://github.com/ayaalsbbagh-ux/ipi405.git
