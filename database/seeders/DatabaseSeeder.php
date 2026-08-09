@@ -19,15 +19,15 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
         ]);
 
-if (!User::where('email', 'admin@example.com')->exists()) {
-$admin = User::create([
-'name' => 'Admin',
-'email' => 'admin@example.com',
-'password' => Hash::make('123456'),
-]);
+        if (!User::where('email', 'admin@example.com')->exists()) {
+            $admin = User::create([
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('123456'),
+            ]);
 
-$admin->assignRole('admin');
-}
+            $admin->assignRole('admin');
+        }
 
 
         $user = User::first();

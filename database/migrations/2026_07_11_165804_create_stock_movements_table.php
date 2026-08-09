@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('stock_movements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products');
-            $table->foreignId('user_id')->constrained('users');
-            $table->enum('change_type', ["increase", "decrease"]);
-            $table->integer('amount');
-            $table->date('date');
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->integer('quantity');
+            $table->string('type')->default('in');
+            $table->timestamp('date')->useCurrent();
             $table->timestamps();
         });
     }
