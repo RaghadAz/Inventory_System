@@ -10,12 +10,12 @@ class Debt extends Model
     protected $fillable = [
         'person_name',
         'type',
+        'user_id',
         'amount',
         'reason',
         'sale_id',
         'is_paid',
         'notes',
-        'user_id',
     ];
 
     protected $casts = [

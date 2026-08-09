@@ -11,14 +11,9 @@ class StockMovement extends Model
     protected $fillable = [
         'product_id',
         'user_id',
-        'change_type',
-        'amount',
-        'date',
-        'quantity',
         'type',
-        'sale_id',
-        'notes',
-    ];
+        'quantity',
+        'date',];
     public function product()
     {
         return $this->belongsTo(Product::class);

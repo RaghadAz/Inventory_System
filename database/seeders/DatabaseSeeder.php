@@ -19,26 +19,35 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
         ]);
 
-        $user = User::first() ?? User::factory()->create();
+if (!User::where('email', 'admin@example.com')->exists()) {
+$admin = User::create([
+'name' => 'Admin',
+'email' => 'admin@example.com',
+'password' => Hash::make('123456'),
+]);
+
+$admin->assignRole('admin');
+}
+
+
+        $user = User::first();
 
         $category = Category::first() ?? Category::create(['name' => 'General']);
         $supplier = Supplier::first() ?? Supplier::create([
             'name' => 'Main Supplier',
             'phone' => '0912345678',
-            'email' => 'supplier@example.com', // 👈 أضيفتي هذا السطر المفقود
+            'email' => 'supplier@example.com',
         ]);
 
-        $category = Category::first() ?? Category::create(['name' => 'General']);
 
         $product = Product::first() ?? Product::create([
             'supplier_id' => $supplier->id,
             'category_id' => $category->id,
-            'name' => 'Experimental Product',
+            'name' => 'Test Product',
             'quantity' => 100,
             'price' => 1000,
         ]);
 
-        $user = User::first() ?? User::factory()->create();
 
         StockMovement::create([
             'product_id' => $product->id,

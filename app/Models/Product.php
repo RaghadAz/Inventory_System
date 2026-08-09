@@ -10,16 +10,29 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name',      'sku',  'barcode',   'cost_price',   'price',  'quantity',   'supplier_id',  'category_id',  'image',];
+    protected $fillable = [
+        'name',
+        'sku',
+        'barcode',
+        'cost_price',
+        'price',
+        'quantity',
+        'supplier_id',
+        'category_id',
+        'image',
+    ];
+
     protected $casts = [
         'cost_price' => 'decimal:2',
         'price' => 'decimal:2',
         'quantity' => 'integer',
     ];
+
     public function getStockAttribute(): int
     {
         return (int) $this->quantity;
     }
+
     public function getPurchasePriceAttribute(): float
     {
         return (float) ($this->cost_price ?? 0);
@@ -29,12 +42,14 @@ class Product extends Model
     {
         return (float) ($this->price ?? 0);
     }
+
     public function getStockLabelAttribute(): string
     {
-        if ($this->quantity <= 0) return "🚫 {$this->name} (Out of Stock )";
-        if ($this->quantity <= 5) return "⚠️ {$this->name} (Remaining  {$this->quantity})";
+        if ($this->quantity <= 0) return "🚫 {$this->name} (Out of Stock)";
+        if ($this->quantity <= 5) return "⚠️ {$this->name} (Remaining {$this->quantity})";
         return "{$this->name} ({$this->quantity})";
     }
+
     protected static function booted(): void
     {
         static::creating(function ($product) {
@@ -57,20 +72,19 @@ class Product extends Model
                     $quantityNeeded = 5;
                     $amount = (float) (($product->cost_price ?? 0) * $quantityNeeded);
 
-                    \App\Models\Debt::create([
+                    Debt::create([
                         'person_name' => $supplier->name,
-                        'amount' => $amount,
-                        'type' => 'supplier',
-                        'is_paid' => 0,
-                        'user_id' => auth()->id(),
-                        'due_date' => now()->addDays(7),
-                        'notes' => 'Auto‑Generated Stock Replenishment Request: ' . $product->name,
+                        'amount'      => $amount,
+                        'type'        => 'supplier',
+                        'is_paid'     => 0,
+                        'notes'       => 'Auto-Generated Stock Replenishment Request: ' . $product->name,
+                        'user_id'     => auth()->id() ?? 1,
                     ]);
 
                     Notification::make()
-
                         ->title('⚠️ Low Stock Alert')
-                        ->body("Product: {$product->name} – Supplier: {$supplier->name}")->warning()
+                        ->body("Product: {$product->name} – Supplier: {$supplier->name}")
+                        ->warning()
                         ->send();
                 }
             }

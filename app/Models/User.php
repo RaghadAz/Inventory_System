@@ -24,8 +24,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
     ];
+    public function canAccessPanel(\Filament\Panel $panel): bool
+{
+    // يمكنكِ تحديد الإيميل الخاص بكِ ليكون الأدمن دائماً
+    if ($this->email === 'admin@example.com') {
+        return true; 
+    }
+
+    return $this->hasRole('admin');
+}
 
     /**
      * The attributes that should be hidden for serialization.
@@ -50,7 +58,7 @@ class User extends Authenticatable
         ];
     }
     public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
+{
+    return $this->role === 'admin';
+}
 }

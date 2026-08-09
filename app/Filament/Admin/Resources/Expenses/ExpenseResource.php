@@ -5,8 +5,6 @@ namespace App\Filament\Admin\Resources\Expenses;
 use App\Filament\Admin\Resources\Expenses\Pages\CreateExpense;
 use App\Filament\Admin\Resources\Expenses\Pages\EditExpense;
 use App\Filament\Admin\Resources\Expenses\Pages\ListExpenses;
-use App\Filament\Admin\Resources\Expenses\Schemas\ExpenseForm;
-use App\Filament\Admin\Resources\Expenses\Tables\ExpensesTable;
 use App\Models\Expense;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
@@ -32,40 +30,50 @@ class ExpenseResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
-                TextInput::make('reason')->required()->label('Reason'),
-                TextInput::make('amount')->numeric()->required()->label('Amount'),
-                DatePicker::make('spent_at')->default(now())->required()->label('Spent At '),
-                Textarea::make('notes')->label('Notes'),
-            ]);
-    }
+        ->schema([
+            TextInput::make('title')
+            ->label('Reason / Title')
+            ->required()
+            ->dehydrated(true)
+            ->maxLength(255),
 
+            TextInput::make('amount')
+                ->numeric()
+                ->required()
+                ->label('Amount'),
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                TextColumn::make('reason')->label('Reason'),
-                TextColumn::make('amount')->money('SYP')->label('Amount'),
-                TextColumn::make('spent_at')->date()->label('Spent At  '),
-            ])
-            ->actions([])
-            ->bulkActions([]);
-    }
+            DatePicker::make('spent_at')
+                ->default(now())
+                ->required()
+                ->label('Spent At'),
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
+           // Textarea::make('notes')
+                //->label('Notes')
+               // ->columnSpanFull(),
+        ]);
+}
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => ListExpenses::route('/'),
-            'create' => CreateExpense::route('/create'),
-            'edit' => EditExpense::route('/{record}/edit'),
-        ];
-    }
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            TextColumn::make('title')->label('Reason / Title')->searchable(),
+            TextColumn::make('amount')->money('SYP')->label('Amount'),
+            TextColumn::make('spent_at')->date()->label('Spent At'),
+        ]);
+}
+
+public static function getRelations(): array
+{
+    return [];
+}
+
+public static function getPages(): array
+{
+    return [
+        'index' => ListExpenses::route('/'),
+        'create' => CreateExpense::route('/create'),
+        'edit' => EditExpense::route('/{record}/edit'),
+    ];
+}
 }

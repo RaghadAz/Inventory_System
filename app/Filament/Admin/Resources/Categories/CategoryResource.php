@@ -30,43 +30,46 @@ class CategoryResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
-                TextInput::make('name')
-                    ->label(' Category Name')
-                    ->required()
-                    ->maxLength(255),
-
-                Textarea::make('description')
-                    ->label('Description')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
-            ]);
-    }
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->label('Category Name ')
-                    ->searchable()
-                    ->sortable(),
-
-                TextColumn::make('description')
-                    ->label('Description')
-                    ->limit(50),
-
-                TextColumn::make('created_at')
-                    ->label('Created At ')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('products_sum_quantity')
-                    ->label(' Total Remaining Stock ')
-                    ->sum('products', 'quantity')
-                    ->color('info')
-                    ->weight('bold'),
-            ]);
-    }
+                ->schema([
+                    TextInput::make('name')
+                        ->label('Category Name')
+                        ->required()
+                        ->maxLength(255),
+    
+                    Textarea::make('description')
+                        ->label('Description')
+                        ->maxLength(65535)
+                        ->columnSpanFull(),
+                ]);
+        }
+    
+        public static function table(Table $table): Table
+        {
+            return $table
+                ->columns([
+                    TextColumn::make('name')
+                        ->label('Category Name')
+                        ->searchable()
+                        ->sortable(),
+    
+                    TextColumn::make('description')
+                        ->label('Description')
+                        ->limit(50),
+    
+                    TextColumn::make('created_at')
+                        ->label('Created At')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+    
+                    // التصحيح: حساب مجموع الكميات عبر الموديل بأمان وبشكل مباشر
+                    TextColumn::make('products_count')
+                        ->label('Total Remaining Stock')
+                        ->getStateUsing(fn (Category $record): int => (int) $record->products()->sum('quantity'))
+                        ->color('info')
+                        ->weight('bold'),
+                ]);
+        }
 
 
     public static function getRelations(): array

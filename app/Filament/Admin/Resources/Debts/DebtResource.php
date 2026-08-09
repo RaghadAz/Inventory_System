@@ -36,9 +36,9 @@ class DebtResource extends Resource
                 Select::make('type')
                     ->label('Category')
                     ->options([
-                        \App\Models\Category::all()->pluck('name', 'id')
+                        'customer' => 'Customer',
+                        'supplier' => 'Supplier',
                     ])
-                    ->searchable()
                     ->required(),
 
                 TextInput::make('amount')

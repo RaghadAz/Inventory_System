@@ -15,30 +15,19 @@ class SaleObserver
             if ($product) {
                 $product->quantity -= $item->quantity;
                 $product->save();
-                \App\Models\StockMovement::create([
-                    'product_id'  => $item->product_id,
-                    'user_id'     => auth()->id(),
-                    'change_type' => 'decrease',
-                    'amount'      => $item->quantity,
-                    'date'        => now(),
-                    'quantity'    => -$item->quantity,
-                    'type'        => 'sale',
-                    'sale_id'     => $sale->id,
-                    'notes'       => "Sale Invoice #{$sale->id}",
-                ]);
             }
         }
 
         if ($sale->payment_type === 'debt' && $sale->remaining_price > 0) {
             Debt::create([
-                'user_id' => auth()->id(),
-                'sale_id' => $sale->id,
+                'sale_id'     => $sale->id,
+                'user_id'     => auth()->id() ?? $sale->user_id ?? 1, 
                 'person_name' => $sale->customer_name,
-                'type' => 'customer',
-                'amount' => $sale->remaining_price,
-                'reason' => "Sales Invoice #{$sale->id}",
-                'is_paid' => false,
-                'notes' => 'Auto‑Generated Debt from Sales Invoice',
+                'type'        => 'customer',
+                'amount'      => $sale->remaining_price,
+                'reason'      => 'Sales Invoice #' . $sale->id,
+                'is_paid'     => 0,
+                'notes'       => 'Auto-Generated Debt from Sales Invoice',
             ]);
         }
     }
@@ -51,18 +40,6 @@ class SaleObserver
             if ($product) {
                 $product->quantity += $item->quantity;
                 $product->save();
-
-                \App\Models\StockMovement::create([
-                    'product_id' => $item->product_id,
-                    'quantity' => -$item->quantity,
-                    'type' => 'sale_delete',
-                    'amount'      => $item->quantity,
-                    'change_type' => 'increase',
-                    'sale_id' => $sale->id,
-                    'notes' => 'Auto‑Generated Stock Deduction',
-                    'user_id' => auth()->id(),
-                    'date'        => now(),
-                ]);
             }
         }
 

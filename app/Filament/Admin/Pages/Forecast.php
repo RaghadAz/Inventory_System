@@ -15,11 +15,6 @@ class Forecast extends Page
 
 
     public array $data = [];
-    public static function canAccess(): bool
-    {
-        return auth()->user()?->role === 'admin';
-    }
-
     public function mount()
     {
         $controller = new ForecastController();

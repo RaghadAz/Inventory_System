@@ -8,23 +8,17 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StockMovementOverview extends StatsOverviewWidget
 {
-    public static function canView(): bool
-    {
-        return auth()->user()->role === 'admin';
-    }
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Stock Movements', StockMovement::count())
-                ->description('All Inventory Movements')
-                ->color('primary'),
-
-            Stat::make('Stock Increases', StockMovement::where('change_type', 'increase')->count())
-                ->description('Increase Transactions')
+            Stat::make('إجمالي حركة المخزن', StockMovement::count()),
+            
+            // تغيير change_type = increase إلى type = in
+            Stat::make('حركات الإدخال (In)', StockMovement::where('type', 'in')->count())
                 ->color('success'),
 
-            Stat::make('Stock Decreases', StockMovement::where('change_type', 'decrease')->count())
-                ->description('Decrease Transactions')
+            // تغيير change_type = decrease إلى type = out
+            Stat::make('حركات الإخراج (Out)', StockMovement::where('type', 'out')->count())
                 ->color('danger'),
         ];
     }
