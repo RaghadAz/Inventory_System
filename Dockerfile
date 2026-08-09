@@ -1,26 +1,25 @@
-FROM php:8.3-cli
+FROM php:8.2-fpm
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    libicu-dev \
+    git \
+    unzip \
     libzip-dev \
     libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install intl gd zip
+    libicu-dev \
+    && docker-php-ext-install zip gd intl pdo pdo_mysql
 
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader
 
-RUN chmod -R 775 storage bootstrap/cache
+RUN php artisan config:clear
+RUN php artisan route:clear
+RUN php artisan view:clear
 
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD php artisan serve --host 0.0.0.0 --port 8000
