@@ -14,12 +14,17 @@ WORKDIR /var/www
 
 COPY . .
 
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+RUN php artisan config:clear
+RUN php artisan route:clear
+RUN php artisan view:clear
+
 RUN mkdir -p storage/framework/cache \
     && mkdir -p storage/framework/sessions \
     && mkdir -p storage/framework/views \
     && chmod -R 775 storage
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+    RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
 RUN php artisan config:clear || true
 RUN php artisan cache:clear || true
