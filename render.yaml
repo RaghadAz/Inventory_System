@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: my-laravel-app
+    runtime: php
+    buildCommand: "./build.sh"
+    startCommand: "caddy run --config caddy.json"
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_ENV
+        value: production
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromService:
+          type: postgres
+          name: mysqldb
+          property: host
+      - key: DB_DATABASE
+        fromService:
+          type: postgres
+          name: mysqldb
+          property: database
+      - key: DB_USERNAME
+        fromService:
+          type: postgres
+          name: mysqldb
+          property: user
+      - key: DB_PASSWORD
+        fromService:
+          type: postgres
+          name: mysqldb
+          property: password
+
+  - type: postgres
+    name: mysqldb
+    databaseName: laravel_db
+    user: laravel_user
