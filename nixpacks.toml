@@ -1,0 +1,10 @@
+[phases.setup]
+nixPkgs = ["php82", "php82Packages.composer"]
+
+[phases.install]
+cmds = [
+  "apt-get update",
+  "apt-get install -y libicu-dev libzip-dev libpng-dev zip unzip",
+  "docker-php-ext-install intl gd zip",
+  "composer install --optimize-autoloader --no-interaction"
+]
