@@ -35,14 +35,14 @@ class CategoryResource extends Resource
                         ->label('Category Name')
                         ->required()
                         ->maxLength(255),
-    
+
                     Textarea::make('description')
                         ->label('Description')
                         ->maxLength(65535)
                         ->columnSpanFull(),
                 ]);
         }
-    
+
         public static function table(Table $table): Table
         {
             return $table
@@ -51,18 +51,17 @@ class CategoryResource extends Resource
                         ->label('Category Name')
                         ->searchable()
                         ->sortable(),
-    
+
                     TextColumn::make('description')
                         ->label('Description')
                         ->limit(50),
-    
+
                     TextColumn::make('created_at')
                         ->label('Created At')
                         ->dateTime()
                         ->sortable()
                         ->toggleable(isToggledHiddenByDefault: true),
-    
-                    // التصحيح: حساب مجموع الكميات عبر الموديل بأمان وبشكل مباشر
+
                     TextColumn::make('products_count')
                         ->label('Total Remaining Stock')
                         ->getStateUsing(fn (Category $record): int => (int) $record->products()->sum('quantity'))

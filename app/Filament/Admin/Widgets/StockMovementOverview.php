@@ -11,14 +11,13 @@ class StockMovementOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('إجمالي حركة المخزن', StockMovement::count()),
-            
-            // تغيير change_type = increase إلى type = in
-            Stat::make('حركات الإدخال (In)', StockMovement::where('type', 'in')->count())
+
+            Stat::make('Total Stock Movements', StockMovement::count()),
+
+            Stat::make('Inbound Movements (In)', StockMovement::where('type', 'in')->count())
                 ->color('success'),
 
-            // تغيير change_type = decrease إلى type = out
-            Stat::make('حركات الإخراج (Out)', StockMovement::where('type', 'out')->count())
+            Stat::make('Outbound Movements (Out)', StockMovement::where('type', 'out')->count())
                 ->color('danger'),
         ];
     }

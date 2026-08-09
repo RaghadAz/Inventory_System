@@ -27,9 +27,8 @@ class User extends Authenticatable
     ];
     public function canAccessPanel(\Filament\Panel $panel): bool
 {
-    // يمكنكِ تحديد الإيميل الخاص بكِ ليكون الأدمن دائماً
     if ($this->email === 'admin@example.com') {
-        return true; 
+        return true;
     }
 
     return $this->hasRole('admin');

@@ -1,28 +1,23 @@
 <x-filament-panels::page>
     <div class="space-y-6" dir="rtl">
 
-        <!-- حقل إدخال الباركود -->
         <div class="p-4 bg-gray-800 rounded-xl border border-green-500 shadow-lg">
-            <input type="text" 
-                   wire:model.lazy="barcode" 
-                   wire:keydown.enter="searchProduct($event.target.value)"
-                   placeholder="Enter barcode here or use scanner..."
-                   class="w-full text-center text-xl p-3 rounded bg-white text-black" 
-                   autofocus />
+            <input type="text" wire:model.lazy="barcode" wire:keydown.enter="searchProduct($event.target.value)"
+                placeholder="Enter barcode here or use scanner..."
+                class="w-full text-center text-xl p-3 rounded bg-white text-black" autofocus />
         </div>
 
-        <!-- جدول المنتجات في الفاتورة الحالية -->
         <div class="p-6 bg-gray-800 rounded-xl border border-green-500 shadow-lg text-white">
-            <h3 class="text-xl font-bold mb-4">قائمة الفاتورة الحالية:</h3>
-            
+            <h3 class="text-xl font-bold mb-4">Current Invoice List: </h3>
+
             <div class="overflow-x-auto mb-6">
                 <table class="w-full text-right text-sm">
                     <thead class="border-b border-gray-600 text-green-400">
                         <tr>
-                            <th class="py-2">المنتج</th>
-                            <th class="py-2">السعر</th>
-                            <th class="py-2">الكمية</th>
-                            <th class="py-2">الإجمالي</th>
+                            <th class="py-2">Product</th>
+                            <th class="py-2">Price</th>
+                            <th class="py-2">Quantity</th>
+                            <th class="py-2">Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,7 +30,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-4 text-center text-gray-400">لم يتم إدخال أي منتج بعد</td>
+                                <td colspan="4" class="py-4 text-center text-gray-400">No products scanned yet</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -52,20 +47,18 @@
 
             <div class="flex justify-center gap-4 mt-6">
                 <button wire:click="completeSale"
-                        class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition">
-                        إتمام البيع وحفظ الفاتورة
-                </button>
+                    class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition">
+                    Complete Sale & Save Invoice </button>
                 <button wire:click="resetScanner"
-                        class="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition">
-                        تفريغ / فاتورة جديدة
-                </button>
+                    class="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition">
+                    Clear / New Invoice </button>
             </div>
         </div>
 
-        <!-- رفع صورة أو تشغيل الكاميرا -->
         <div class="p-6 bg-gray-800 rounded-xl border border-green-500 shadow-lg text-center space-y-4">
-            <label class="block text-white font-bold text-lg">رفع صورة الباركوود:</label>
-            <input type="file" id="qr-input-file" accept="image/*" class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-green-600 file:text-white cursor-pointer" />
+            <label class="block text-white font-bold text-lg"> Upload Barcode Image:</label>
+            <input type="file" id="qr-input-file" accept="image/*"
+                class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-green-600 file:text-white cursor-pointer" />
             <div id="reader" class="w-full mt-4 bg-black rounded-lg overflow-hidden min-h-[150px]"></div>
         </div>
 
@@ -82,24 +75,36 @@
                     html5QrCode.scanFile(e.target.files[0], true)
                         .then(decodedText => {
                             @this.call('searchProduct', decodedText).then(() => {
-                                setTimeout(() => { isProcessing = false; }, 1500);
+                                setTimeout(() => {
+                                    isProcessing = false;
+                                }, 1500);
                             });
                         })
                         .catch(err => {
                             isProcessing = false;
-                            alert("لم يتم العثور على باركوود واضح في الصورة.");
+                            alert("No readable barcode found in the image.");
                         });
                 });
 
-                const config = { fps: 5, qrbox: { width: 300, height: 150 } };
-                html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                const config = {
+                    fps: 5,
+                    qrbox: {
+                        width: 300,
+                        height: 150
+                    }
+                };
+                html5QrCode.start({
+                    facingMode: "environment"
+                }, config, (decodedText) => {
                     if (!isProcessing) {
                         isProcessing = true;
                         @this.call('searchProduct', decodedText).then(() => {
-                            setTimeout(() => { isProcessing = false; }, 1500);
+                            setTimeout(() => {
+                                isProcessing = false;
+                            }, 1500);
                         });
                     }
-                }).catch(err => console.warn("الكاميرا غير متاحة"));
+                }).catch(err => console.warn("Camera not available"));
             });
         </script>
     </div>

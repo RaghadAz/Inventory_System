@@ -14,7 +14,7 @@ class ScanProduct extends Page
 {
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-qr-code';
     protected static ?string $navigationLabel = 'Scan Product';
-    
+
     protected string $view = 'filament.admin.pages.scan-product';
 
     public $barcode = '';
@@ -22,7 +22,6 @@ class ScanProduct extends Page
     public $totalPrice = 0;
     public $lastScannedProduct = null;
 
-    // معالجة البحث والجمع الصحيح
     public function searchProduct($barcode)
     {
         $barcodeClean = trim((string)$barcode);
@@ -36,13 +35,13 @@ class ScanProduct extends Page
             ->first();
 
         if (!$product) {
-            Notification::make()->title('المنتج غير موجود: ' . $barcodeClean)->danger()->send();
+            Notification::make()->title('Product not found: ' . $barcodeClean)->danger()->send();
             $this->barcode = '';
             return;
         }
 
         if ($product->quantity <= 0) {
-            Notification::make()->title('المنتج نافد من المخزن: ' . $product->name)->warning()->send();
+            Notification::make()->title('Out of stock: '  . $product->name)->warning()->send();
             $this->barcode = '';
             return;
         }
@@ -56,9 +55,8 @@ class ScanProduct extends Page
         $index = collect($this->cart)->search(fn($item) => $item['product_id'] === $product->id);
 
         if ($index !== false) {
-            // التحقق من توفر الكمية قبل زيادة العنصر
             if ($product->quantity < ($this->cart[$index]['quantity'] + 1)) {
-                Notification::make()->title('الكمية المطلوبة غير متوفرة بالمخزن')->warning()->send();
+                Notification::make()->title('Requested quantity not available ')->warning()->send();
                 return;
             }
             $this->cart[$index]['quantity'] += 1;
@@ -74,18 +72,16 @@ class ScanProduct extends Page
             ];
         }
 
-        // حساب الإجمالي الصحيح بمجموع كافة عناصر السلة
         $this->totalPrice = collect($this->cart)->sum('total');
         $this->lastScannedProduct = $product;
 
-        Notification::make()->title('تمت إضافة: ' . $product->name)->success()->send();
+        Notification::make()->title('Added: '  . $product->name)->success()->send();
     }
 
-    // إتمام البيع: الخصم المباشر وإنشاء الفاتورة
     public function completeSale()
     {
         if (empty($this->cart)) {
-            Notification::make()->title('السلة فارغة')->warning()->send();
+            Notification::make()->title('Cart is empty ')->warning()->send();
             return;
         }
 
@@ -95,7 +91,6 @@ class ScanProduct extends Page
                     fn($item) => ($item['price'] - $item['cost_price']) * $item['quantity']
                 );
 
-                // 1. إنشاء الفاتورة في جدول sales
                 $sale = Sale::create([
                     'user_id'         => auth()->id() ?? 1,
                     'customer_name'   => 'Walk-in Customer',
@@ -106,7 +101,6 @@ class ScanProduct extends Page
                     'remaining_price' => 0,
                 ]);
 
-                // 2. إنشاء عناصر الفاتورة والخصم من جدول المنتجات
                 foreach ($this->cart as $item) {
                     SaleItem::create([
                         'sale_id'     => $sale->id,
@@ -118,12 +112,11 @@ class ScanProduct extends Page
                         'total'       => $item['total'],
                     ]);
 
-                    // خصم الكمية المباشر من قاعدة البيانات
                     Product::where('id', $item['product_id'])->decrement('quantity', $item['quantity']);
                 }
 
                 Notification::make()
-                    ->title('تم حفظ الفاتورة #' . $sale->id . ' وخصم الكميات بنجاح!')
+                    ->title('Invoice #' . $sale->id . ' saved and stock updated!')
                     ->success()
                     ->send();
 
@@ -131,7 +124,7 @@ class ScanProduct extends Page
             });
         } catch (\Exception $e) {
             Notification::make()
-                ->title('خطأ في عملية الحفظ')
+                ->title('Error while saving')
                 ->body($e->getMessage())
                 ->danger()
                 ->send();
