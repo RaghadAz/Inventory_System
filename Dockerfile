@@ -16,8 +16,7 @@ WORKDIR /var/www
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
-
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 RUN php artisan config:clear
 RUN php artisan route:clear
 RUN php artisan view:clear
