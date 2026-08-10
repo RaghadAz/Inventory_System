@@ -14,7 +14,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 COPY . .
-
+RUN chmod -R 775 storage bootstrap/cache
 RUN composer install --optimize-autoloader --no-interaction
 
 CMD php artisan serve --host=0.0.0.0 --port=8000
