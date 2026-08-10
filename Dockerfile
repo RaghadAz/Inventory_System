@@ -15,6 +15,11 @@ WORKDIR /app
 
 COPY . .
 
+# Create Laravel storage directories
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p bootstrap/cache \
+    && chmod -R 777 storage bootstrap/cache
+
 RUN composer install --no-dev --optimize-autoloader
 
 CMD php artisan serve --host=0.0.0.0 --port=${PORT}
