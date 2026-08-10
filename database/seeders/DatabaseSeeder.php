@@ -8,6 +8,8 @@ use App\Models\StockMovement;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +25,7 @@ class DatabaseSeeder extends Seeder
             $admin = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@example.com',
-                'password' => bcrypt('123456'),
+                'password' => Hash::make('123456'),
             ]);
 
             $admin->assignRole('admin');
