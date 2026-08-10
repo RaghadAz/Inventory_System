@@ -20,7 +20,10 @@
         "shuchkin/simplexlsxgen": "^1.5",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^6.25",
-        "thiagoalessio/tesseract_ocr": "^2.13"
+        "thiagoalessio/tesseract_ocr": "^2.13",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

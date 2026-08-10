@@ -16,5 +16,5 @@ WORKDIR /app
 COPY . .
 RUN chmod -R 775 storage bootstrap/cache
 RUN composer install --optimize-autoloader --no-interaction
-
+RUN echo "force rebuild"
 CMD php artisan serve --host=0.0.0.0 --port=8000
