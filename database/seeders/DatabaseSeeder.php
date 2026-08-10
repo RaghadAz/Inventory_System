@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
+use Illuminate\Support\Facades\Hash;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\StockMovement;
