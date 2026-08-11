@@ -26,7 +26,7 @@ RUN mkdir -p \
     bootstrap/cache \
     && chmod -R 777 storage bootstrap/cache
 
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --optimize-autoloader --no-scripts
 
 RUN php artisan package:discover --ansi
 
