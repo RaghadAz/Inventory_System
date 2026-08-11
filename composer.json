@@ -15,7 +15,6 @@
         "filament/actions": "^5.5",
         "filament/filament": "^5.5",
         "laravel/framework": "^12.0",
-        "laravel/pail": "^1.2",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^13.1",
@@ -65,18 +64,12 @@
         "post-autoload-dump": [
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
-        ],
+             ],
         "pre-package-uninstall": [
-            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
     },
     "extra": {
