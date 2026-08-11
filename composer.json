@@ -22,8 +22,7 @@
         "spatie/laravel-permission": "^6.25",
         "thiagoalessio/tesseract_ocr": "^2.13",
         "ext-pdo": "*",
-        "ext-pdo_mysql": "*",
-        "kitloong/laravel-migrations-generator": "^7.4"
+        "ext-pdo_mysql": "*"
 
     },
     "require-dev": {
